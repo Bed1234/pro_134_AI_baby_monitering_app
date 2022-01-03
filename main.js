@@ -19,7 +19,7 @@ function setup(){
      
     //initializing cocossd model
     objectDetector = ml5.objectDetector('cocossd', modelLoaded);
-   // document.getElementById("status").innerHTML  =  "Status : Detecting Objects";
+    document.getElementById("status").innerHTML  =  "Status : Detecting Objects";
    // document.getElementById("status2").innerHTML  =  "Status : Baby found";
 }
 
@@ -27,7 +27,7 @@ function modelLoaded(){
     console.log("Model is loaded");
      status = true;
 
-   objectDetector.detect(img , gotResults);
+   //objectDetector.detect(img , gotResults);
 }
 
 function gotResults(error , results){
@@ -55,7 +55,7 @@ function draw(){
 
         for (i = 0; i < objects.length; i++) {
           document.getElementById("status").innerHTML = "Status : Object detected";
-          document.getElementById("status2").innerHTML  =  "Status :Baby found";
+         
          // document.getElementById("number_of_objects").innerHTML = "Number of objects detected are : " + objects.length;
 
              fill (r,g,b);
@@ -63,17 +63,26 @@ function draw(){
 
              text (objects[i].label + " " +  percent + "%" , objects[i].x + 15, objects[i].y + 15 , 100, 100);
              textSize(20);
-
+          
              noFill ();
              stroke (r,g,b);
              rect ( objects[i].x , objects[i].y , objects[i].width, objects[i].height ); 
-             song.stop();
+
+             if(objects[i].label == "person"){
+                document.getElementById("status2").innerHTML  =  "Status :Baby found";
+                song.stop();
+             }
+             else{
+                document.getElementById("status2").innerHTML = "Status : Baby not found";
+                song.play();
+            }
+             
         }
-    } else{
-        document.getElementById("status").innerHTML = "Status : Object detected";
-        document.getElementById("status2").innerHTML = "Status : Baby not found";
-       song.play();
-    }
+        if(objects.length == 0){
+            document.getElementById("status2").innerHTML = "Status : Baby not found";
+            song.play();
+        }
+    } 
     
         
     
